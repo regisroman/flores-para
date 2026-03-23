@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas para el Amor de mi Vida</title>
+    <style>
+        :root {
+            --bg-color: #fdf6e3; 
+            --text-color: #583f2a; 
+            --num-dark-color: #4a3622;
+            --num-light-color: #7f6e5e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden; 
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 85%;
+            max-width: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .text-content {
+            flex: 1;
+            max-width: 45%;
+            font-size: 1.1em;
+        }
+
+        .text-content p {
+            margin: 15px 0;
+            line-height: 1.6;
+            opacity: 0; 
+            animation: fadeInText 1s forwards;
+        }
+
+        .text-content p:nth-child(1) { animation-delay: 0.5s; }
+        .text-content p:nth-child(2) { animation-delay: 1.5s; }
+        .text-content p:nth-child(3) { animation-delay: 2.5s; }
+        .text-content p:nth-child(4) { animation-delay: 3.5s; font-weight: bold; font-size: 1.2em; }
+
+        .cursor {
+            display: inline-block;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        /* --- CONTENEDOR DE TU IMAGEN REAL --- */
+        .bouquet-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bouquet-img {
+            max-width: 400px; /* Tamaño del ramo */
+            width: 100%;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: popInFlower 1.5s 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.3)); /* Sombrita para que parezca flotar */
+        }
+
+        @keyframes popInFlower {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- TEMPORIZADOR --- */
+        .timer-container {
+            text-align: left;
+            width: 85%;
+            max-width: 1000px;
+            opacity: 0;
+            animation: fadeInText 1s 5.5s forwards; 
+        }
+
+        .timer-container > p { margin: 5px 0; font-size: 1.2em; }
+        .timer-line { border: none; height: 2px; background-color: var(--text-color); width: 100%; margin: 10px 0; }
+        #timer { font-size: 1.5em; display: flex; align-items: baseline; gap: 8px; }
+        .number { display: flex; }
+        .num-dark { color: var(--num-dark-color); }
+        .num-light { color: var(--num-light-color); }
+        .text { font-size: 0.7em; margin-right: 15px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="text-content">
+            <p>Flores Amarillas para el amor de mi vida:</p>
+            <p>Tal vez el mundo este lleno de personas increibles, pero mi corazon tuvo la suerte de encontrarte a ti. Y aunque la vida cambie mil veces los caminos, si algo pudiera volver a repetir, seria el dia en que te conoci...</p>
+            <p>Cuanto más tiempo estoy contigo más te amo.</p>
+            <p>Mi niña de los ojos bonitos...! <span class="cursor">_</span></p>
+        </div>
+        
+        <div class="bouquet-container">
+            <img src="ramo.png" alt="Ramo de Girasoles" class="bouquet-img">
+        </div>
+    </div>
+
+    <div class="timer-container">
+        <p>Mi amor por ti comenzó hace...</p>
+        <div id="timer">
+            <span class="number num-days"><span class="num-dark"></span><span class="num-light"></span></span>
+            <span class="text">días</span>
+            <span class="number num-hours"><span class="num-dark"></span><span class="num-light"></span></span>
+            <span class="text">horas</span>
+            <span class="number num-minutes"><span class="num-dark"></span><span class="num-light"></span></span>
+            <span class="text">minutos</span>
+            <span class="number num-seconds"><span class="num-dark"></span><span class="num-light"></span></span>
+            <span class="text">segundos</span>
+        </div>
+        <hr class="timer-line">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ¡ATENCIÓN! Cambia esta fecha
+            const startDate = new Date('2015-08-30T00:00:00'); 
+
+            const updateTimer = () => {
+                const now = new Date();
+                const difference = now - startDate;
+                if (difference < 0) return;
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                updateNumber('num-days', days);
+                updateNumber('num-hours', hours);
+                updateNumber('num-minutes', minutes);
+                updateNumber('num-seconds', seconds);
+            };
+
+            const updateNumber = (idClass, value) => {
+                const numberElement = document.querySelector(`.${idClass}`);
+                const darkPart = numberElement.querySelector('.num-dark');
+                const lightPart = numberElement.querySelector('.num-light');
+
+                let valStr = value.toString();
+                if (idClass !== 'num-days') valStr = valStr.padStart(2, '0');
+
+                if (valStr.length >= 2) {
+                  darkPart.textContent = valStr.substring(0, valStr.length - 1);
+                  lightPart.textContent = valStr.substring(valStr.length - 1);
+                } else {
+                  darkPart.textContent = '0';
+                  lightPart.textContent = valStr;
+                }
+            };
+            updateTimer(); 
+            setInterval(updateTimer, 1000); 
+        });
+    </script>
+</body>
+</html>
